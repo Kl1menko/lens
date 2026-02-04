@@ -10,13 +10,14 @@ export function getAdminIdsFromEnv() {
     .filter(Boolean);
 }
 
-export function getCurrentAdminId() {
-  return cookies().get(ADMIN_COOKIE)?.value;
+export async function getCurrentAdminId() {
+  const store = await cookies();
+  return store.get(ADMIN_COOKIE)?.value;
 }
 
-export function isAdmin() {
+export async function isAdmin() {
   const allowed = getAdminIdsFromEnv();
   if (!allowed.length) return false;
-  const current = getCurrentAdminId();
+  const current = await getCurrentAdminId();
   return !!current && allowed.includes(current);
 }

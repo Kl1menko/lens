@@ -3,9 +3,9 @@ import { getAdminIdsFromEnv, isAdmin } from "@/lib/admin-auth";
 import { setAdminSession } from "./actions";
 import AdminDashboard from "./ui/admin-dashboard";
 
-export default function AdminPage() {
+export default async function AdminPage() {
   const allowed = getAdminIdsFromEnv();
-  const hasAdmin = isAdmin();
+  const hasAdmin = await isAdmin();
 
   return (
     <main className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 pb-20 pt-10">
