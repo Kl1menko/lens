@@ -14,7 +14,14 @@ export async function setAdminSession(formData: FormData) {
   if (!adminId) {
     return;
   }
-  cookies().set(ADMIN_COOKIE, adminId, { httpOnly: false, maxAge: 60 * 60 * 24 * 7, path: "/" });
+  const store = await cookies();
+  // next/headers cookies() in server actions returns a mutable store at runtime
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (store as any).set(ADMIN_COOKIE, adminId, {
+    httpOnly: false,
+    maxAge: 60 * 60 * 24 * 7,
+    path: "/",
+  });
   redirect("/admin");
 }
 
