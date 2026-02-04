@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LENS9 MVP – scaffold
 
-## Getting Started
+Фрейм: Next.js (App Router) + TypeScript + Tailwind + shadcn/ui + next-themes. Стек під Supabase (auth/db/storage) — клієнт в `src/lib/supabase/client.ts`.
 
-First, run the development server:
+## Швидкий старт
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
+# http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Структура
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `src/app/(pages)` — маршрути (Home, Catalog, Drops, WTB, Profile) + спільний layout з навбаром/темою.
+- `src/components/` — UI: навбар, картки каталогу, секції, брендмарка, theme-provider.
+- `src/content/` — мок-дані каталогу й константи (features, brands, condition scale).
+- `src/lib/` — утиліти (cn, Supabase browser client).
+- `db/` — майбутня схема/migrations для Supabase (draft).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Тема та UI
 
-## Learn More
+- Tailwind 3.4 + shadcn/ui (config у `components.json`, `tailwind.config.ts`, `src/app/globals.css`).
+- Theme toggle (light/dark) у навбарі, `next-themes` з `attribute="class"`.
+- Базовий layout з glass/bg-grid стилями, шрифти Space Grotesk + JetBrains Mono.
 
-To learn more about Next.js, take a look at the following resources:
+## Демо-контент
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Головна: hero, останні лоти, блок Drops, блок WTB.
+- `/catalog` відображає мок-товари з `src/content/items.ts`.
+- `/drops`, `/wtb`, `/profile` — заглушки з описом наступних кроків.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Наступні кроки (план)
 
-## Deploy on Vercel
+1) Додати сторінку товару `/items/[slug]` з Origin/Tech/Condition.  
+2) Інтегрувати Supabase схему + RLS + seed, підʼєднати storage.  
+3) Форми WTB/Drop, email/Telegram алерти (Resend/бот).  
+4) Документація condition/auth протоколу та пайплайнів QC.  
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Нотифікації (free)
+- TG бот: додай у `.env.local` `TELEGRAM_BOT_TOKEN` і `TELEGRAM_CHAT_ID` (канал/група для алертів), опц. `ADMIN_USER_IDS`.
+- `src/app/admin/actions.ts`: `notifyScheduledDrop(drop)` шле Telegram при створенні scheduled drop; `notifyItemLive(item)` робить простий матчинг WTB → DM/чат.
+- Матчинг WTB: `src/lib/matching.ts` (brand/size/query includes). Використовує мокові `wtbRequests` (замінити на запити з БД пізніше).
